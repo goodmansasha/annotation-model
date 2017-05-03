@@ -1,5 +1,5 @@
 # annotation-model
-Javascript implementation of the W3C Web Annotation Data Model, probably most useful for Web Extensions and serializing references to specific resources on a HTML page
+JavaScript implementation of the W3C Web Annotation Data Model, probably most useful for Web Extensions and serializing references to specific resources on a HTML page.
 
 The specification: 
 https://www.w3.org/TR/annotation-model/
@@ -8,7 +8,7 @@ https://www.w3.org/TR/annotation-model/
 ~~~~
 var ab = new AnnotationBuilder().highlight(); //takes current user selection and builds an Annotation
 var json = ab.toJSON(); // exports serialized version to JSON-LD 
-console.log(json); //dumps serialized version to developer consooe
+console.log(json); //dumps serialized version to developer console
 var ab2 = new AnnotationBuilder().fromJSON(json); //revives serialized version 
 ab2.result.target.toSelection(); //highlights the original selection 
 ~~~~
@@ -33,5 +33,5 @@ The selectors all extend the 'Segment Selector' class and require writing just t
 
 The 'Segment Selector' class further assumes that ranges refine one another, as defined in the W3C specification.
 
-There are a few ways to implement TextQuoteSelector, and things get very difficult quickly if the wrong approach is taken. Ideally, this selector should reference text without destroying whitespace information found in whitespace preserving areas such as the 'pre' element or any element with CSS styles preserving whitespace. By 'normalizing' text using the HTML innerText standard (*instead of* something like XPath 'normalize-space'), meaningful whitespace is preserved. This is necessary for preserving leading and trailing whitespace in computer code that utilizes tabs and line breaks, such as Python or tab separated value tables, and also aesthetically important for prose and poetry.
+There are a few ways to implement TextQuoteSelector, and things get very difficult quickly if the wrong approach is taken. Ideally, this selector should reference text without destroying whitespace information found in whitespace preserving areas such as the 'pre' element or any element with CSS styles preserving whitespace. By 'normalizing' text using the HTML innerText standard (*instead of* something like XPath 'normalize-space'), meaningful whitespace is preserved. This is necessary for preserving leading and trailing whitespace in computer code that utilizes tabs and line breaks, such as Python or tab separated value tables, and also is aesthetically important for prose and poetry.
 
