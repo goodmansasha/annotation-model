@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!-- saved from url=(0094)file:///Users/sgoodman/Dropbox/Sites/luminary-ai/robust_bookmarks/source/toy.html#endContainer -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+    </head>
+    <body>  
+        text    without a paragaph directly on body with newline before and after and proceeding spaces that are invisible and not highlighted in selection.
+
+        <p>which one? <span>     which one?<span>   which one? </span>
+        </span></p>
+        <p>    </p><p>    </p><p>    </p><p><span> </span>a<span> </span>paragraph</p><p>a paragraph<span></span> with <span>
+            a span </span> and there is no invisible/unhighligtable bits BEFORE no space between blocks, but after there is one</p><p>   next paragraph, invisible proceeding whitespace is found! Afterwards, there is another invisible/non-highlightable range after made of break and a few spaces after end of paragraph element that probably is also not findable using window.find because that search tally is lower</p> 
+        <p>paragraph with a special space in between letters: A<span> </span>B<span>
+</span>C<span>&nbsp;<span>D</span></span></p>
+<p>length of <span>&nbsp;&nbsp;&nbsp;<span>non-breaking spaces is 1 each (3). Also, preceeding linebreak is invisible and not selectable.<span style="white-space:pre">   </span></span></span></p>
+<h3>Proceeding whitespace<span> </span></h3>
+<template id="productrow"></template>
+<p><span style="white-space:pre">       </span>node<span style="white-space:pre">         </span>is first element in block without proceeding whitespace outside of p element.</p>
+<p>     <span>node</span> is in a span element and proceeding literal whitespace before the element is not displayed, including space in first child element</p>
+<p>     <span>   node</span> even has proceeding whitespace trimmed within it.</p>
+<p>     <span> <span>   node</span></span> even has proceeding whitespace trimmed within a span of span.</p>
+<p>     <span>&nbsp; node&nbsp;</span>&nbsp;has two spaces when its a non-breaking space followed by a space</p>
+<p>     <span> &nbsp;node</span> has one space when its a space followed by a non-breaking space</p>
+     <span> <span>   node</span></span> can even be child of document. Its about being in a 'segment' during parsing I think.<p id="endContainer"> <span id="emptyS1">new end</span></p>
+<h3>Whitespace inside</h3>
+<p>   all extra whitespace nodes are collapsed when consecutive  <span> <span> nodes <span>are <span>nested</span></span> inside one another.</span>
+</span>. New line counts a space.</p>
+<p>In general breaks
+
+    are handled as a single whitespace. the element below is just proceeding and trailing whitespace. it is not selectable.
+</p>
+<pre>    whitespace      is      important even though      it is voodo and      we avoid indexing it.     predictable actions important though.    </pre>
+<p>    an inline space followed by pre spaces that messes me up <span style="white-space:pre">        </span>is      important even though      it is vvoodo and      we avoid indexing it.     predictable actions important though.   </p>
+<p style="height:1;overflow:hidden">going to be invisible</p>
+<input type="hidden"> 
+<div style="direction:rtl;" lang="he">וְהָיוּ לְטֹטָפֹת בֵּין |  עֵינֶֽיךָ, וּכְתַבְתָּם 1 2 3 4 5 עַל מְזֻזֹת בֵּיתֶךָ וּבִשְׁעָרֶֽי ךָ</div>
+
+<form action="file:///Users/sgoodman/Dropbox/Sites/luminary-ai/robust_bookmarks/source/toy.html#">
+  First name:<br>
+  <input type="text" name="firstname" value="Mickey"><br>
+  Last name:<br>
+  <input type="text" name="lastname" value="Mouse">
+  <br><br>
+  <input type="submit" value="Submit">
+</form> 
+<p id="strangeFruit">𐀁𐀁𐀁 i ♥ u 𐀁𐀁𐀁</p>
+
+<table style="width:100%">
+  <tbody><tr>
+    <th>Firstname</th>
+    <th>Lastname</th> 
+    <th>Age</th>
+  </tr>
+  <tr>
+    <td>Jill</td>
+    <td>Smith</td> 
+    <td>50</td>
+  </tr>
+  <tr>
+    <td>Bo</td>
+    <td>Knowles</td> 
+    <td>74</td>
+  </tr>
+  <tr>
+    <td>Eve</td>
+    <td>Jackson</td> 
+    <td>94</td>
+  </tr>
+</tbody></table>
+
+<ol>
+  <li>Coffee</li>
+  <li>Tea</li>
+  <li>Milk</li>
+</ol>
+
+</body></html>
