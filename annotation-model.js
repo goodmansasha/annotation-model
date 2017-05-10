@@ -20,7 +20,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-
 class SegmentSelector{
         constructor(){ 
             return this; 
@@ -45,11 +44,20 @@ class SegmentSelector{
                        return thisRange
                     }
         }
-        toSelection(){
+        toSelection(scroll=false){
                     var selection = window.getSelection();
                     selection.removeAllRanges();
                     var range = this.toRange();
                     selection.addRange(range); //TODO, funciton to get 'most popular' range.
+
+                    if(scroll){
+                         var absolutePosition = Math.round(window.scrollY+ range.getBoundingClientRect().top);
+                        var windowBottom = Math.round(window.scrollY + window.innerHeight);
+                        var windowTop = Math.round(window.scrollY);
+                        if(absolutePosition > windowBottom | absolutePosition < windowTop){
+                            window.scroll(0, absolutePosition); //TODO: breaks in fixed position div. make sure to get correct fixed div locaction..
+                        }  
+                }
             return this;
         }
         fromSelection(selection= document.getSelection()){
@@ -210,7 +218,8 @@ class XPathSelector extends SegmentSelector{
                      return null; 
                 }
                 throw 'error in _nodePosition. Could the node have been removed?';
-    }  
+    }
+
     _compileXpath(axis='//',step,locationPath){
             var xpath = '';
             xpath = xpath + step.NodeTest; 
@@ -302,7 +311,6 @@ class DataPositionSelector extends SegmentSelector{
                             }
                             var charCode = DataPositionSelector.fixedCharCodeAt(str,i);
                             byteLen += DataPositionSelector.charCodeBytes(charCode);
-                            
                     } 
                 return null; //if we didn't find anything return null
      }
@@ -362,6 +370,7 @@ class HTMLFragmentSelector extends SegmentSelector{
             console.warn("could not find a named attribute within 100 pixes of range boundary .")
             return this;
         }
+
         firstRange(inRange){
              if(typeof inRange == 'undefined'){ var inRange = new Range(); inRange.selectNode(document.documentElement); }
             if(this.value == null){return null};
@@ -373,134 +382,6 @@ class HTMLFragmentSelector extends SegmentSelector{
              }
              return null;
         }
-}
-
-class TextQuoteSelector{
-    constructor(object={exact:null}){
-        this.type = "TextQuoteSelector";
-         this.exact = object.exact
-      return this;
-    }   
-    
-    firstRange(inRange){ 
-            throw 'retrieving ranges from this class not yet implemented but is definately possible by mapping the rendered innerText similar to what is already implemented.';
-        } //matches any match, in document order
-
-     fromRange(range,inRange){ 
-             if(typeof inRange == 'undefined'){ var inRange = new Range(); inRange.selectNode(document.body); }
-             var ranges = [inRange,range];
-            var results = ranges.map(function(){return {range:new Range(), start:null, end:null, exact:null }});
-
-            var commonAncestorContainer = ranges[0].commonAncestorContainer; //first range
-            if(commonAncestorContainer.nodeType == Node.TEXT_NODE) { commonAncestorContainer=commonAncestorContainer.parentElement }
-            var innerText = commonAncestorContainer.innerText;
-            function literalRegex(str) { return String(str).replace(/([\\\.\+\*\?\[\^\]\$\(\)\{\}\=\!<>\|\:])/g, '\\$1'); }  
-            function innerTextNodeFilter(node){ 
-                if(node.nodeType==Node.ELEMENT_NODE) {
-                    if(['area','base','basefont','datalist','head', 'command','link','meta','noembed','noframes','param','rp','source','template','title','track','script','style','noscript','option','select','optgroup'].includes(node.tagName.toLowerCase())){ return NodeFilter.FILTER_REJECT; } // https://html.spec.whatwg.org/multipage/dom.html#the-innertext-idl-attribute
-                    var style = window.getComputedStyle(node);
-                    if( style.visibility=='hidden' | style.display=='none' | style.height=="0px" ){ return NodeFilter.FILTER_REJECT; } // | style.clip == 'rect(0px 0px 0px 0px)
-                }
-                return NodeFilter.FILTER_ACCEPT; 
-            }
-
-            var treeWalker = document.createTreeWalker(commonAncestorContainer, NodeFilter.SHOW_ELEMENT + NodeFilter.SHOW_TEXT, { acceptNode: innerTextNodeFilter });
-            
-            var pointer = 0; 
-            var walk = true;
-            while(walk){ 
-                 var node = treeWalker.nextNode(); 
-                 if(node==null){walk = false;  break;}
-                 if(node.nodeType==Node.TEXT_NODE) {
-                             if( node.nodeValue.replace(/[ \n\r\t]+/g,'')!='' ){   //text node with 'word' characters not affected by CSS whitespace formating rules but maybe CSS capitalization  
-                                    var sourceWordPattern = new RegExp('[^ \n\r\t]+','g'); //token boundaries
-                                    var sourceWordMatch =null;
-                                    while(sourceWordMatch = sourceWordPattern.exec(node.nodeValue)){ 
-                                            var sourceWord = sourceWordMatch[0]; 
-                                            var sourceWordStart = sourceWordMatch.index;
-                                            var sourceWordEnd = sourceWordMatch.index + sourceWordMatch[0].length;
-                                            var innerTextWordPattern = new RegExp(literalRegex(sourceWord),'mi');//detect pattern
-                                            var innerTextWordMatch = innerTextWordPattern.exec(innerText.substring(pointer));  
-                                            var innerTextWordStart = pointer + innerTextWordMatch.index;
-                                            var innerTextWordEnd = pointer + innerTextWordMatch.index + innerTextWordMatch[0].length;
-                                            // console.log(sourceWord + ':' + innerTextWord + ':' + innerText.substring(innerTextWordStart, innerTextWordEnd) + ':' + node.nodeValue.substring(sourceWordStart,sourceWordEnd));
-                                            for(var i = 0; i < ranges.length; i++){
-                                                var parentInnerTextStart = ((i-1) < 0) ? 0: results[i-1].start; 
-                                                if(results[i].start == null & node == ranges[i].startContainer & node == ranges[i].endContainer) {
-                                                     if(sourceWordEnd >= ranges[i].startOffset & sourceWordStart <= ranges[i].endOffset){
-                                                            var wordStartOffset = ranges[i].startOffset - sourceWordStart ;
-                                                            var wordEndOffset = sourceWordEnd - ranges[i].endOffset ; 
-                                                            results[i].start = innerTextWordStart + wordStartOffset - parentInnerTextStart;
-                                                            results[i].end =  innerTextWordEnd -wordEndOffset - parentInnerTextStart;
-                                                            results[i].range.setStart(node,sourceWordStart + wordStartOffset);
-                                                            results[i].range.setEnd(node,sourceWordEnd - wordEndOffset);
-                                                     }
-                                                } else if(node == ranges[i].startContainer){
-                                                        if(results[i].start == null && sourceWordEnd >= ranges[i].startOffset){
-                                                             var wordStartOffset = ranges[i].startOffset - sourceWordStart ;
-                                                             results[i].start =  innerTextWordStart + wordStartOffset - parentInnerTextStart;
-                                                             results[i].range.setStart(node,sourceWordStart + wordStartOffset);
-                                                        }
-                                                } else if(node == ranges[i].endContainer){
-                                                         if( sourceWordStart <= ranges[i].startOffset){
-                                                                var wordEndOffset = sourceWordEnd - ranges[i].endOffset ; 
-                                                                results[i].end =  innerTextWordEnd - wordEndOffset - parentInnerTextStart;
-                                                                results[i].range.setEnd(node,sourceWordEnd - wordEndOffset);
-                                                         }
-                                                } else if(ranges[i].comparePoint(node,0)==0){ 
-                                                    if(results[i].start == null){ //input range was skipped b/c not textnode! Use this.
-                                                        results[i].start =  innerTextWordStart - parentInnerTextStart;
-                                                        results[i].range.setStart(node,sourceWordStart); 
-                                                    }
-                                                        results[i].end =  innerTextWordEnd;
-                                                        results[i].range.setEnd(node,sourceWordEnd); 
-                                                } else if( results[i].end==null && ranges[i].comparePoint(node,0)==1){
-                                                        results[i].end =  innerTextWordStart - parentInnerTextStart; //no length. maybe just pointer?
-                                                        results[i].range.setEnd(node,0); 
-                                                }
-                                    } // end of ranges loop
-                                    pointer = innerTextWordEnd; //!!I
-                                 } // end of source word match 
-                                 
-                             } else { 
-                                  for(var i = 0; i < ranges.length; i++){  
-                                       var parentInnerTextStart = ((i-1) < 0) ? 0: results[i-1].start;                                 
-                                        if( (results[i].start == null && node==ranges[i].startContainer) | ranges[i].comparePoint(node,0)==0 | node==ranges[i].endContainer  ){ 
-                                                    var spaceStartOffset = 0;  var spaceEndOffset = 0;
-                                                    if(results[i].start == null & node==ranges[i].startContainer){ 
-                                                            spaceStartOffset = ranges[i].startOffset ;
-                                                            if(['pre','pre-wrap'].includes(window.getComputedStyle(node.parentElement).whiteSpace.toLowerCase())){
-                                                                    results[i].start = pointer + spaceStartOffset - parentInnerTextStart;
-                                                                    results[i].range.setStart(node,spaceStartOffset); 
-                                                            } else {
-                                                                    results[i].start = pointer + Math.max(Math.min(spaceStartOffset,1),0) - parentInnerTextStart; 
-                                                                    results[i].range.setStart(node,Math.max(Math.min(spaceStartOffset,1),0)) //might be safer to just set to 0 in case of totally collapsed space at the start of a block element
-                                                            }  
-                                                    };
-                                                    if(ranges[i].comparePoint(node,0)==0 | node==ranges[i].endContainer){
-                                                        if(node==ranges[i].endContainer){
-                                                             spaceEndOffset = ranges[i].endOffset ;
-                                                        }
-                                                        if(['pre','pre-wrap'].includes(window.getComputedStyle(node.parentElement).whiteSpace.toLowerCase())){
-                                                            results[i].end = pointer + spaceEndOffset - parentInnerTextStart ;
-                                                            results[i].range.setEnd(node, spaceEndOffset );
-                                                        } else {
-                                                            results[i].end = pointer + Math.max(Math.min(spaceEndOffset,1),0) - parentInnerTextStart;
-                                                            results[i].range.setEnd(node,Math.max(Math.min(spaceEndOffset,1),0)); 
-                                                        }
-                                                }
-                                        }
-                             } //end of range loop
-                    } //end of empty text node
-                } // end of text node.
-                if(ranges[1].comparePoint(node,0)==1 & ranges[1].end !=null){
-                            walk = false;  break; 
-                }
-            }   
-            results[1].exact = innerText.substring(results[1].start + results[0].start, results[1].end + results[0].start);       
-           this.exact = results[1].exact;
-           return this;
-     }
 }
 
 class SpecificResource{
@@ -532,27 +413,27 @@ class SpecificResource{
         }
         return null; //if failed, return nothing  
     }
+
+
     toRange(){
         return this.firstRange();
     }
 
-    toSelection(toWindow=true){
+    toSelection(scroll=false){
                     var selection = window.getSelection();
                     selection.removeAllRanges();
                     var range = this.toRange();
                     selection.addRange(this.toRange()); //TODO, funciton to get 'most popular' range.
-                if(toWindow){
-                         var absolutePosition = Math.round(window.scrollY+ range.getBoundingClientRect().top);
-                        var windowBottom = Math.round(window.scrollY + window.innerHeight);
-                        var windowTop = Math.round(window.scrollY);
-                        if(absolutePosition > windowBottom | absolutePosition < windowTop){
-                            window.scroll(0, absolutePosition); //TODO: breaks in fixed position div. make sure to get correct fixed div locaction..
-                        }  
-                }
-
+                    if(scroll){
+                            var absolutePosition = Math.round(window.scrollY+ range.getBoundingClientRect().top);
+                            var windowBottom = Math.round(window.scrollY + window.innerHeight);
+                            var windowTop = Math.round(window.scrollY);
+                            if(absolutePosition > windowBottom | absolutePosition < windowTop){
+                                window.scroll(0, absolutePosition); //TODO: breaks in fixed position div. make sure to get correct fixed div locaction..
+                            }  
+                    }
             return this;
     }
-
 }
 
 class ExternalWebResource{
@@ -581,10 +462,10 @@ class ExternalWebResource{
 
 
 class Annotation{
-    constructor(object={id:null, target:null}){ //uuid can also apply to Body and Target
+    constructor(object={id:null, target:null}){ //uuid can also apply to Body and Target. 
         this['@context'] = 'http://www.w3.org/ns/anno.jsonld';
         this.type = 'Annotation'; 
-        this.id = object.id; //An Annotation must have exactly 1 URL that identifies it.
+        this.id = object.id; //An Annotation must have exactly 1 URL that identifies it. 
         this.target = object.target; //There must be 1 or more target relationships associated with an Annotation
         if(typeof object.motivation != 'undefined'){ this.motivation = object.motivation }
        if(typeof object.canonical != 'undefined'){ this.canonical = object.canonical }
@@ -593,7 +474,172 @@ class Annotation{
 
         return this;
     }  
+}
 
+class TextPositionSelector extends SegmentSelector{
+        constructor(object={start:null, end:null}){
+            super();
+            this.type = 'TextPositionSelector';
+            this.start = object.start;
+            this.end = object.end;
+        }
+
+        _textNodeIterator(inRange){
+            var commonAncestorContainer = inRange.commonAncestorContainer; 
+            console.log(commonAncestorContainer)
+            if(commonAncestorContainer.nodeType == Node.TEXT_NODE) { 
+                    commonAncestorContainer=commonAncestorContainer.parentElement 
+            } else if(commonAncestorContainer.nodeType == Node.DOCUMENT_NODE){
+                    commonAncestorContainer=document.documentElement; 
+            }
+            return document.createNodeIterator(commonAncestorContainer,NodeFilter.SHOW_TEXT,{ acceptNode: function(node){
+                if(node==inRange.startContainer || node==inRange.endContainer || inRange.comparePoint(node,0)==0){
+                    return NodeFilter.FILTER_ACCEPT; 
+                }
+            } });
+        }
+
+       fromRange(range,inRange){
+            if(typeof inRange == 'undefined'){ var inRange = new Range(); inRange.selectNode(document.documentElement); }
+            var nodeIterator = this._textNodeIterator(inRange);
+            var commonAncestorContainerCount = 0; 
+            var inRangeStart = null;
+            var inRangeEnd = null;
+            var rangeStart = null;
+            var rangeEnd = null;
+            var node;
+            while(node = nodeIterator.nextNode()){
+                 var nodeValueLength = node.nodeValue.length;
+                    if(inRangeStart==null){
+                        if(node==inRange.startContainer){
+                            inRangeStart = commonAncestorContainerCount + inRange.startOffset;
+                        } else if (inRange.comparePoint(node,0)==0){
+                            inRangeStart = commonAncestorContainerCount;
+                        }
+                    }
+                    if(inRangeEnd==null){
+                         if(node==inRange.endContainer){
+                             inRangeEnd = commonAncestorContainerCount + inRange.endOffset;
+                         } 
+                    }
+                    if(inRangeStart!=null & rangeStart ==null){
+                        if(node==range.startContainer){
+                            rangeStart = commonAncestorContainerCount-inRangeStart + range.startOffset ;
+                        } else if(range.comparePoint(node,0)==0){
+                            rangeStart = commonAncestorContainerCount-inRangeStart ;
+                        }
+                    }
+                    if(inRangeStart!=null & rangeEnd==null){
+                        if(node==range.endContainer){
+                            rangeEnd = commonAncestorContainerCount-inRangeStart + range.endOffset ;
+                        } else if(range.comparePoint(node,0)==1){
+                            rangeEnd = commonAncestorContainerCount-inRangeStart;
+                        }
+                    }
+                     if(rangeStart !=null & rangeEnd != null){
+                        this.start = rangeStart;
+                        this.end = rangeEnd;
+                        break;
+                    }
+                    commonAncestorContainerCount = commonAncestorContainerCount + nodeValueLength;
+            }
+            return this;
+       }
+        firstRange(inRange){ 
+             if(typeof inRange == 'undefined'){ var inRange = new Range(); inRange.selectNode(document.documentElement); }
+                var nodeIterator = this._textNodeIterator(inRange);
+                var exactMatchStart = this.start;
+                var exactMatchEnd = this.end;
+
+                var commonAncestorContainerCount = 0; 
+                var inRangeStart = null;
+                var inRangeEnd = null;
+                var rangeStartContainer = null;
+                var rangeStartOffset = null;
+                var rangeEndContainer = null;
+                var rangeEndOffset = null;
+            
+                 var node;
+                 while(node = nodeIterator.nextNode()){
+                        var nodeValueLength = node.nodeValue.length;
+                        if(inRangeStart==null){
+                            if(node==inRange.startContainer){
+                                inRangeStart = commonAncestorContainerCount + inRange.startOffset;
+                            } else if (inRange.comparePoint(node,0)==0){
+                                inRangeStart = commonAncestorContainerCount;
+                            }
+                        }
+                        if(inRangeEnd==null){
+                            if(node==inRange.endContainer){
+                                inRangeEnd = commonAncestorContainerCount + inRange.endOffset;
+                            } 
+                        }
+                    if(inRangeStart!=null & rangeStartContainer == null){
+                            if(commonAncestorContainerCount + nodeValueLength >= exactMatchStart+inRangeStart & commonAncestorContainerCount < exactMatchStart+inRangeStart){
+                                rangeStartContainer = node; 
+                                rangeStartOffset = exactMatchStart+inRangeStart-commonAncestorContainerCount;
+                            }
+                        }
+                        if(inRangeStart!=null & rangeEndContainer== null){
+                            if(commonAncestorContainerCount + nodeValueLength >= exactMatchEnd+inRangeStart & commonAncestorContainerCount < exactMatchEnd+inRangeStart){
+                            //TODO: check if in range.
+                                rangeEndContainer = node;
+                                rangeEndOffset = exactMatchEnd+inRangeStart - commonAncestorContainerCount;
+                            } 
+                        }
+                        if(rangeStartContainer!=null & rangeEndContainer!=null) { break;}
+                        commonAncestorContainerCount = commonAncestorContainerCount + nodeValueLength;
+                
+            }
+             var range = new Range();
+             range.setStart(rangeStartContainer, rangeStartOffset) ;
+             range.setEnd(rangeEndContainer, rangeEndOffset) ;
+            return range; 
+        }
+
+}
+
+
+class TextQuoteSelector extends TextPositionSelector{
+    constructor(object={exact:null, prefix:null, suffix:null}){
+        super();
+        this.type = 'TextQuoteSelector';
+        this.exact = object.exact;
+        this.suffix = object.suffix;
+        this.prefix = object.prefix;
+        Object.defineProperty(this, 'start', { value: this.start, enumerable: false, writable:true })
+        Object.defineProperty(this, 'end', { value: this.end, enumerable: false, writable:true })
+        Object.defineProperty(this, 'epsilon', { value: 32, enumerable: false, writable:true })
+    }
+
+     fromRange(range, inRange){ 
+        if(typeof inRange == 'undefined'){ var inRange = new Range(); inRange.selectNode(document.documentElement); }
+        super.fromRange(range,inRange);
+        var textContent = inRange.toString();
+  
+        this.exact = textContent.substring(this.start,this.end); 
+        this.prefix = textContent.substring(Math.max(this.start-this.epsilon,0), this.start); 
+        this.suffix =  textContent.substring(this.end,Math.min(this.end+this.epsilon,textContent.length))           
+        return this;
+    }
+    
+    firstRange(inRange){ 
+        if(typeof inRange == 'undefined'){ var inRange = new Range(); inRange.selectNode(document.documentElement); }
+        var textContent = inRange.toString();
+        var fullMatchStart = textContent.indexOf(this.prefix + this.exact + this.suffix);
+        if(fullMatchStart!==-1){
+                this.start = fullMatchStart + this.prefix.length;
+                this.end = this.start + this.exact.length ;
+        } else {
+            console.warn( 'TextQuoteSelector did not find a string match. returning null. try prefix/suffix and maybe string distance on those?');
+            return null;
+        }
+        return super.firstRange(inRange);
+    } 
+
+     toTextPositionSelector(){
+       return new TextPositionSelector({start:this.start,end:this.end});
+    }
 }
 
 //the intention of the builder pattern is to find a solution to the telescoping constructor anti-pattern
@@ -618,6 +664,7 @@ class AnnotationBuilder{
                     case "XPathSelector": return new XPathSelector(value);
                     case "DataPositionSelector": return new DataPositionSelector(value);
                     case "TextQuoteSelector": return new TextQuoteSelector(value);
+                    case "TextPositionSelector": return new TextPositionSelector(value);
                     default: console.warn('mismatched type attribute')
             }
         } else {
@@ -677,8 +724,9 @@ class AnnotationBuilder{
                      newTarget.selector.push(rangeSelector); 
                 }
 
-                var textSelector = new TextQuoteSelector().fromRange(range);
-                newTarget.selector.push(textSelector);
+                var textQuoteSelector = new TextQuoteSelector().fromRange(range);
+                newTarget.selector.push(textQuoteSelector);
+                newTarget.selector.push(textQuoteSelector.toTextPositionSelector());
                
                 this.result.target = newTarget;
 
