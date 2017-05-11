@@ -15,23 +15,20 @@ ab2.result.target.toSelection(); //highlights the original selection
 
 # Status
 
-As of the current version 0.1.0, the following classes are implemented:
+As of the current version 0.2.0, the following classes are implemented:
 
 * Annotation
 * SpecificResource
 * RangeSelector
-* XPathSelector
-* DataPositionSelector (for Text, including Unicode with surrogate pairs)  
-
-The following is partially implemented:
-
-* TextQuoteSelector (de-serialization is not yet implemented but can be achieved with some straightforward work)
+* XPathSelector  (generates a minimal unique XPath)
+* DataPositionSelector
+* TextQuoteSelector
+* TextPositionSelector
 
 # Design Notes
 
-The selectors all extend the 'Segment Selector' class and require writing just two methods currently: one for representing an HTML Range object called 'fromRange' and the other for reviving a range called 'firstRange'. HTML Ranges were chosen as a fundamental building block because they conveniently represent Document Fragments, Nodes, and Boundary Points. 
+Selectors can refine one another, as defined in the W3C specification. So, if a class has a 'refinedBy' property with a Selector there, that refining Selector will only select inside its parent. For example, text positions are relative to the start of the parent selector's text in the overall document.
 
-The 'Segment Selector' class further assumes that ranges refine one another, as defined in the W3C specification.
+For Selectors, most of of hard work is done in just two methods: one for converting an HTML Range into the selector and the other for reviving the selector into a range (called 'firstRange'). HTML Ranges are the fundamental building blocks because they represent several specific parts of a web page: HTML Document Fragments, Nodes, and Boundary Points. Even various plaintext formats (e.g .csv or .tsv) can be selected using Ranges in a browser because that plaintext file is always *rendered* in a 'pre' element in a minimal HMTL page in a modern browser. Check the devtools and you will see. HTML Ranges are therefore super useful.
 
-There are a few ways to implement TextQuoteSelector, and things get very difficult quickly if the wrong approach is taken. Ideally, this selector should reference text without destroying whitespace information found in whitespace preserving areas such as the 'pre' element or any element with CSS styles preserving whitespace. By 'normalizing' text using the HTML innerText standard (*instead of* something like XPath 'normalize-space' which completely ignores CSS rendering), meaningful whitespace is preserved. This is necessary for preserving leading and trailing whitespace in computer code that utilizes tabs and line breaks, such as Python or tab separated value tables, and also is aesthetically important for prose and poetry. 
 
