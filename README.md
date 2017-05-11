@@ -31,4 +31,4 @@ Selectors can refine one another, as defined in the W3C specification. So, if a 
 
 For Selectors, most of of hard work is done in just two methods: one for converting an HTML Range into the selector and the other for reviving the selector into a range (called 'firstRange'). HTML Ranges are the fundamental building blocks because they represent several specific parts of a web page: HTML Document Fragments, Nodes, and Boundary Points. Even various plaintext formats (e.g .csv or .tsv) can be selected using Ranges in a browser because that plaintext file is always *rendered* in a 'pre' element in a minimal HMTL page in a modern browser. Check the devtools and you will see. HTML Ranges are therefore super useful.
 
-
+There is also a 'tests.html' file that acts as an obstacle course for these selectors. It would be better to have it change dynamically and create a test suite.
