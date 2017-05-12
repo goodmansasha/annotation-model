@@ -3,7 +3,9 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         
     </head>
-    <body>  
+    <body>
+        <textarea id="output" style="float:right;height:25em;min-width:25em;" placeholder="Web Annotation Data Model document appears here upon selection"></textarea>
+
         text    without a paragaph directly on body with newline before and after and proceeding spaces that are invisible and not highlighted in selection.
 
         <p>which one? <span>     which one?<span>   which one? </span>
@@ -74,4 +76,19 @@
   <li>Milk</li>
 </ol>
 
+<script src="annotation-model.js"></script>
+<script>
+document.addEventListener("selectionchange", function() {
+  var selection = window.getSelection();
+  console.log('Selection changed.', selection);
+
+  if (!('firstElementChild' in selection.focusNode
+        && selection.focusNode.firstElementChild.tagName === 'TEXTAREA')) {
+    var ab = new AnnotationBuilder().highlight(); //takes current user selection and builds an Annotation
+    var json = JSON.stringify(ab.result, false, '  '); // exports serialized version to JSON-LD
+    var output = document.getElementById('output');
+    output.value = json;
+  }
+});
+</script>
 </body></html>
