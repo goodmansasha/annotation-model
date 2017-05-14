@@ -4,6 +4,9 @@ JavaScript implementation of the W3C Web Annotation Data Model, probably most us
 The specification: 
 https://www.w3.org/TR/annotation-model/
 
+A demo: 
+https://predict-r.github.io/annotation-model/
+
 # Usage
 
 ```js
