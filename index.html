@@ -82,7 +82,7 @@ document.addEventListener("selectionchange", function() {
   var selection = window.getSelection();
   console.log('Selection changed.', selection);
 
-  if (!('firstElementChild' in selection.focusNode
+  if (!('firstElementChild' in selection.focusNode && selection.focusNode.firstElementChild !=null 
         && selection.focusNode.firstElementChild.tagName === 'TEXTAREA')) {
     var ab = new AnnotationBuilder().highlight(); //takes current user selection and builds an Annotation
     var json = JSON.stringify(ab.result, false, '  '); // exports serialized version to JSON-LD
