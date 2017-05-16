@@ -662,7 +662,7 @@ class AnnotationBuilder{
                     case "DataPositionSelector": return new DataPositionSelector(value);
                     case "TextQuoteSelector": return new TextQuoteSelector(value);
                     case "TextPositionSelector": return new TextPositionSelector(value);
-                    default: console.warn('mismatched type attribute')
+                    default: console.warn('mismatched type attribute in JSON reviver function')
             }
         } else {
                 return this[key];
@@ -802,7 +802,7 @@ class AnnotationBuilder{
     }
 }
 
- var ab = new AnnotationBuilder().highlight()
+// var ab = new AnnotationBuilder().highlight()
 // //ab.result.target.toSelection()
 // var json = ab.toJSON()
 // var ab2 = new AnnotationBuilder().fromJSON(json)
