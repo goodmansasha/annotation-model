@@ -484,7 +484,7 @@ class TextPositionSelector extends SegmentSelector{
 
         _textNodeIterator(inRange){
             var commonAncestorContainer = inRange.commonAncestorContainer; 
-            console.log(commonAncestorContainer)
+           // console.log(commonAncestorContainer)
             if(commonAncestorContainer.nodeType == Node.TEXT_NODE) { 
                     commonAncestorContainer=commonAncestorContainer.parentElement 
             } else if(commonAncestorContainer.nodeType == Node.DOCUMENT_NODE){
