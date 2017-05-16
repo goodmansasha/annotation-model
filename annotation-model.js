@@ -112,7 +112,7 @@ class XPathSelector extends SegmentSelector{
     firstRange(inRange){
          if(typeof inRange == 'undefined'){ var inRange = new Range(); inRange.selectNode(document.documentElement); }
                     var revived = [];
-                    var query = document.evaluate(this.value, inRange.commonAncestorContainer, null,XPathResult.ORDERED_NODE_ITERATOR_TYPE);
+                    var query = document.evaluate(this.value, inRange.commonAncestorContainer, null,XPathResult.ORDERED_NODE_ITERATOR_TYPE,null);
                     var node;
                     var nodes=[]; //could use weakmap to prevent memory leaks? but we are creating ranges, which are robust to changes (?)
                     while(node=query.iterateNext()){
@@ -197,7 +197,7 @@ class XPathSelector extends SegmentSelector{
     }
         //need to check  ALL results to check if selector really unique within the inRange
     _setUniqueXpath(xpath,inRange){
-                    if(document.evaluate('count(' + xpath +')',inRange.commonAncestorContainer,null,XPathResult.NUMBER_TYPE).numberValue==1){
+                    if(document.evaluate('count(' + xpath +')',inRange.commonAncestorContainer,null,XPathResult.NUMBER_TYPE,null).numberValue==1){
                         this.value = xpath; //NOTE: SETS IT!!
                         return true;
                     } else {
@@ -207,7 +207,7 @@ class XPathSelector extends SegmentSelector{
 
     _nodePosition(step, node){
                 var xpath = this._compileXpath('',step);
-                var simset = document.evaluate(xpath,node.parentNode, null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE );
+                var simset = document.evaluate(xpath, node.parentNode, null , XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null);
                 if(simset.snapshotLength >1){
                     for(var i = 0; i < simset.snapshotLength ; i++){    
                         if(simset.snapshotItem(i)==node){
@@ -414,7 +414,6 @@ class SpecificResource{
         return null; //if failed, return nothing  
     }
 
-
     toRange(){
         return this.firstRange();
     }
@@ -459,7 +458,6 @@ class ExternalWebResource{
             return this;
     }
 }
-
 
 class Annotation{
     constructor(object={id:null, target:null}){ //uuid can also apply to Body and Target. 
@@ -598,7 +596,6 @@ class TextPositionSelector extends SegmentSelector{
         }
 
 }
-
 
 class TextQuoteSelector extends TextPositionSelector{
     constructor(object={exact:null, prefix:null, suffix:null}){
@@ -805,7 +802,7 @@ class AnnotationBuilder{
     }
 }
 
-// var ab = new AnnotationBuilder().highlight()
+ var ab = new AnnotationBuilder().highlight()
 // //ab.result.target.toSelection()
 // var json = ab.toJSON()
 // var ab2 = new AnnotationBuilder().fromJSON(json)
