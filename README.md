@@ -19,7 +19,7 @@ ab2.result.target.toSelection(); //highlights the original selection
 
 # Status
 
-As of the current version 0.2.0, the following classes are implemented:
+As of the current version 0.2.1, the following classes are implemented:
 
 * Annotation
 * SpecificResource
