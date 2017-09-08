@@ -786,11 +786,50 @@ class AnnotationBuilder{
         }
         return result;
     }
-    static UUID() {
-            function s4() {
-                return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+    static UUID(version) {
+        function isNode() {
+            return typeof process !== 'undefined' && typeof process.pid === 'number';
+        }
+        function randomBytes(count) {
+            var crypto;
+            if (isNode()) return require('crypto').randomBytes(count);
+            crypto = window.crypto || window.msCrypto; // for IE 11
+            if (!crypto) {
+                console.warn('Your environment does not support Crypto, falling back to Math.random()');
+                var bytes = new Array(count);
+                for (var num, i = 0; i < count; i++) {
+                    if ((i & 0x03) === 0) num = Math.random() * 0x100000000;
+                    bytes[i] = num >>> ((i & 0x03) << 3) & 0xff;
+                }
+                return bytes;
             }
-            return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+            return crypto.getRandomValues(new Uint8Array(count));
+        }
+        function bToStr(byte, sub) {
+            var str = sub ? byte.toString(16).substr(sub) : byte.toString(16);
+            while (str.length < 2) {
+                str = '0' + str;
+            }
+            return str;
+        }
+
+        // Generate UUID v4
+        if (version && version !== 4) throw new Error('Requested unsupported UUID Version ' + version);
+        var bytes = randomBytes(16);
+        // See https://www.ietf.org/rfc/rfc4122.txt (Section 4.4)
+        bytes[6] = (bytes[6] & 0x0f) | 0x40;
+        bytes[8] = (bytes[8] & 0x3f) | 0x80;
+        var str = isNode() ? bytes.toString('hex') : '';
+        if (str === '') {
+            for (var i = 0; i < 16; i += 1) {
+                str += bToStr(bytes[i]);
+            }
+        }
+        return str.substr(0, 8) + '-' +
+            str.substr(8, 4) + '-' +
+            str.substr(12, 4) + '-' +
+            str.substr(16, 4) + '-' +
+            str.substr(20);
     }
     static parseURL(path){
         // any relative URL references are resolved to their absolute form
