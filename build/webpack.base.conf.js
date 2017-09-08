@@ -2,7 +2,7 @@ const path = require('path'),
   fs = require('fs'),
   pkg = require('../package.json'),
   webpack = require('webpack'),
-  UglifyEsPlugin = require('uglify-es-webpack-plugin'),
+  ProgressBarPlugin = require('progress-bar-webpack-plugin'),
   resolve = function (dir) {
     return path.join(__dirname, '..', dir)
   }
@@ -13,7 +13,7 @@ const config = {
   },
   output: {
     path: resolve('dist'),
-    filename: '[name].min.js'
+    filename: '[name].js'
   },
   resolve: {
     extensions: ['.js'],
@@ -24,12 +24,11 @@ const config = {
   },
   module: {
     rules: [
-      { // eslint
+      {
         enforce: 'pre',
-        test: /\.(js)$/,
+        test: /\.js$/,
         loader: 'eslint-loader',
-        include: resolve('src/'),
-        exclude: /node_modules/,
+        include: resolve('src'),
         options: {
           formatter: require('eslint-friendly-formatter')
         }
@@ -37,34 +36,20 @@ const config = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        include: resolve('src/'),
-        exclude: /node_modules/
+        include: resolve('src')
       }
     ]
   },
-  devtool: '#source-map',
   plugins: [
-    new UglifyEsPlugin({
-      sourceMap: true,
-      minimize: true,
-      compress: {
-        warnings: true
-      }
-    }),
     new webpack.BannerPlugin({
-      banner: fs.readFileSync(resolve('LICENSE')) + '\n\n' +
-        'Version: ' + pkg.version + 'Build Date: ' + new Date() + 'Build hash: [hash]\n\n'
+      banner: fs.readFileSync(resolve('LICENSE')) + '\n\nBuild hash: [hash]\nVersion: ' + pkg.version + '\n\n'
+    }),
+    new ProgressBarPlugin({
+      format: ' build [:bar] :percent (:elapsed seconds)',
+      clear: false
     })
   ],
-  externals: [
-    {
-      crypto: true
-    }
-  ],
-  node: {
-    process: false,
-    require: false
-  },
+  target: 'node',
   performance: {
     hints: false
   }
