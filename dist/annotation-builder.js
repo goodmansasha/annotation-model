@@ -22,7 +22,7 @@
  * SOFTWARE.
  * 
  * 
- * Build hash: 490210b8f0025786db1d
+ * Build hash: 9422981150a1d9e8ece0
  * Version: 0.2.1
  * 
  * 
@@ -653,8 +653,8 @@ module.exports = __webpack_require__(4);
 var AnnotationBuilder = __webpack_require__(1).default;
 if (typeof process !== 'undefined' && typeof process.pid === 'number') {
   module.exports = AnnotationBuilder;
-} else {
-  global.AnnotationBuilder = AnnotationBuilder;
+} else if (window) {
+  window.AnnotationBuilder = AnnotationBuilder;
 }
 
 /***/ }),
