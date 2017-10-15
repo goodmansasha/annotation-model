@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- a comment -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        
+
     </head>
     <body>
         <textarea id="output" style="float:right;height:50em;min-width:25em;" placeholder="Web Annotation Data Model document appears here upon selection"></textarea>
@@ -11,7 +11,7 @@
         <p>which one? <span>     which one?<span>   which one? </span>
         </span></p>
         <p>    </p><p>    </p><p>    </p><p><span> </span>a<span> </span>paragraph</p><p>a paragraph<span></span> with <span>
-            a span </span> and there is no invisible/unhighligtable bits BEFORE no space between blocks, but after there is one</p><p>   next paragraph, invisible proceeding whitespace is found! Afterwards, there is another invisible/non-highlightable range after made of break and a few spaces after end of paragraph element that probably is also not findable using window.find because that search tally is lower</p> 
+            a span </span> and there is no invisible/unhighligtable bits BEFORE no space between blocks, but after there is one</p><p>   next paragraph, invisible proceeding whitespace is found! Afterwards, there is another invisible/non-highlightable range after made of break and a few spaces after end of paragraph element that probably is also not findable using window.find because that search tally is lower</p>
         <p>paragraph with a special space in between letters: A<span> </span>B<span>
 </span>C<span>&nbsp;<span>D</span></span></p>
 <p>length of <span>&nbsp;&nbsp;&nbsp;<span>non-breaking spaces is 1 each (3). Also, preceeding linebreak is invisible and not selectable.<span style="white-space:pre">   </span></span></span></p>
@@ -34,7 +34,7 @@
 <pre>    whitespace      is      important even though      it is voodo and      we avoid indexing it.     predictable actions important though.    </pre>
 <p>    an inline space followed by pre spaces that messes me up <span style="white-space:pre">        </span>is      important even though      it is vvoodo and      we avoid indexing it.     predictable actions important though.   </p>
 <p style="height:1;overflow:hidden">going to be invisible</p>
-<input type="hidden"> 
+<input type="hidden">
 <div style="direction:rtl;" lang="he">וְהָיוּ לְטֹטָפֹת בֵּין |  עֵינֶֽיךָ, וּכְתַבְתָּם 1 2 3 4 5 עַל מְזֻזֹת בֵּיתֶךָ וּבִשְׁעָרֶֽי ךָ</div>
 
 <form action="file:///Users/sgoodman/Dropbox/Sites/luminary-ai/robust_bookmarks/source/toy.html#">
@@ -44,28 +44,28 @@
   <input type="text" name="lastname" value="Mouse">
   <br><br>
   <input type="submit" value="Submit">
-</form> 
+</form>
 <p id="strangeFruit">𐀁𐀁𐀁 i ♥ u 𐀁𐀁𐀁</p>
 
 <table style="width:100%">
   <tbody><tr>
     <th>Firstname</th>
-    <th>Lastname</th> 
+    <th>Lastname</th>
     <th>Age</th>
   </tr>
   <tr>
     <td>Jill</td>
-    <td>Smith</td> 
+    <td>Smith</td>
     <td>50</td>
   </tr>
   <tr>
     <td>Bo</td>
-    <td>Knowles</td> 
+    <td>Knowles</td>
     <td>74</td>
   </tr>
   <tr>
     <td>Eve</td>
-    <td>Jackson</td> 
+    <td>Jackson</td>
     <td>94</td>
   </tr>
 </tbody></table>
@@ -76,13 +76,13 @@
   <li>Milk</li>
 </ol>
 
-<script src="annotation-model.js"></script>
+<script src="dist/annotation-builder.min.js"></script>
 <script>
 document.addEventListener("selectionchange", function() {
   var selection = window.getSelection();
   console.log('Selection changed.', selection);
 
-  if (!('firstElementChild' in selection.focusNode && selection.focusNode.firstElementChild !=null 
+  if (!('firstElementChild' in selection.focusNode && selection.focusNode.firstElementChild !=null
         && selection.focusNode.firstElementChild.tagName === 'TEXTAREA')) {
     var ab = new AnnotationBuilder().highlight(); //takes current user selection and builds an Annotation
     var json = JSON.stringify(ab.result, false, '  '); // exports serialized version to JSON-LD
