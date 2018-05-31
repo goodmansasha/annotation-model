@@ -1,5 +1,5 @@
 # annotation-model
-A very lightweight JavaScript implementation of the W3C Web Annotation Data Model, most useful for Web Extensions and serializing references on HTML pages.
+A lightweight JavaScript implementation of the W3C Web Annotation Data Model, most useful for Web Extensions and serializing references on HTML pages.
 
 One of the project leaders of the Apache Annotator project (https://annotator.apache.org/ ) called this project "awesome" for capturing annotations, and has contributed. Both projects depend on the same interchangeable W3C recommended JSON data format. If your use is limited to annotations on relatively static content (e.g. the Internet Archive and not a news site), this project is a good starting point.  In the future, the Apache project will make annotations more durable by implementing an ambitious time-tested method to revive  annotations on ever-changing content, with graceful failures. 
 

@@ -1,94 +1,339 @@
 <!DOCTYPE html>
-<!-- a comment -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-    </head>
-    <body>
-        <textarea id="output" style="float:right;height:50em;min-width:25em;" placeholder="Web Annotation Data Model document appears here upon selection"></textarea>
+<!-- 
+    A poem about spaces, and finding something again.  Words 
+        challenge divisions,
+        out of view,
+        back to the same root.
 
-        text    without a paragaph directly on body with newline before and after and proceeding spaces that are invisible and not highlighted in selection.
+            A beautiful soup
+            of wavy text,
+            images,
+            and emoji gardens.
 
-        <p>which one? <span>     which one?<span>   which one? </span>
-        </span></p>
-        <p>    </p><p>    </p><p>    </p><p><span> </span>a<span> </span>paragraph</p><p>a paragraph<span></span> with <span>
-            a span </span> and there is no invisible/unhighligtable bits BEFORE no space between blocks, but after there is one</p><p>   next paragraph, invisible proceeding whitespace is found! Afterwards, there is another invisible/non-highlightable range after made of break and a few spaces after end of paragraph element that probably is also not findable using window.find because that search tally is lower</p>
-        <p>paragraph with a special space in between letters: A<span> </span>B<span>
-</span>C<span>&nbsp;<span>D</span></span></p>
-<p>length of <span>&nbsp;&nbsp;&nbsp;<span>non-breaking spaces is 1 each (3). Also, preceeding linebreak is invisible and not selectable.<span style="white-space:pre">   </span></span></span></p>
-<h3>Proceeding whitespace<span> </span></h3>
-<template id="productrow"></template>
-<p><span style="white-space:pre">       </span>node<span style="white-space:pre">         </span>is first element in block without proceeding whitespace outside of p element.</p>
-<p>     <span>node</span> is in a span element and proceeding literal whitespace before the element is not displayed, including space in first child element</p>
-<p>     <span>   node</span> even has proceeding whitespace trimmed within it.</p>
-<p>     <span> <span>   node</span></span> even has proceeding whitespace trimmed within a span of span.</p>
-<p>     <span>&nbsp; node&nbsp;</span>&nbsp;has two spaces when its a non-breaking space followed by a space</p>
-<p>     <span> &nbsp;node</span> has one space when its a space followed by a non-breaking space</p>
-     <span> <span>   node</span></span> can even be child of document. Its about being in a 'segment' during parsing I think.<p id="endContainer"> <span id="emptyS1">new end</span></p>
-<h3>Whitespace inside</h3>
-<p>   all extra whitespace nodes are collapsed when consecutive  <span> <span> nodes <span>are <span>nested</span></span> inside one another.</span>
-</span>. New line counts a space.</p>
-<p>In general breaks
+            A maze. 
 
-    are handled as a single whitespace. the element below is just proceeding and trailing whitespace. it is not selectable.
-</p>
-<pre>    whitespace      is      important even though      it is voodo and      we avoid indexing it.     predictable actions important though.    </pre>
-<p>    an inline space followed by pre spaces that messes me up <span style="white-space:pre">        </span>is      important even though      it is vvoodo and      we avoid indexing it.     predictable actions important though.   </p>
-<p style="height:1;overflow:hidden">going to be invisible</p>
-<input type="hidden">
-<div style="direction:rtl;" lang="he">וְהָיוּ לְטֹטָפֹת בֵּין |  עֵינֶֽיךָ, וּכְתַבְתָּם 1 2 3 4 5 עַל מְזֻזֹת בֵּיתֶךָ וּבִשְׁעָרֶֽי ךָ</div>
+            A gauntlet.
 
-<form action="file:///Users/sgoodman/Dropbox/Sites/luminary-ai/robust_bookmarks/source/toy.html#">
-  First name:<br>
-  <input type="text" name="firstname" value="Mickey"><br>
-  Last name:<br>
-  <input type="text" name="lastname" value="Mouse">
-  <br><br>
-  <input type="submit" value="Submit">
-</form>
-<p id="strangeFruit">𐀁𐀁𐀁 i ♥ u 𐀁𐀁𐀁</p>
+    Sources: 
+        http://www.gutenberg.org/files/4300/4300-h/4300-h.htm#link2HCH0011
+        http://www.gutenberg.org/files/11/11-h/11-h.htm#link2HCH0002
+        https://www.gutenberg.org/files/114/114-h/114-h.htm
 
-<table style="width:100%">
-  <tbody><tr>
-    <th>Firstname</th>
-    <th>Lastname</th>
-    <th>Age</th>
-  </tr>
-  <tr>
-    <td>Jill</td>
-    <td>Smith</td>
-    <td>50</td>
-  </tr>
-  <tr>
-    <td>Bo</td>
-    <td>Knowles</td>
-    <td>74</td>
-  </tr>
-  <tr>
-    <td>Eve</td>
-    <td>Jackson</td>
-    <td>94</td>
-  </tr>
-</tbody></table>
+-->
 
-<ol>
-  <li>Coffee</li>
-  <li>Tea</li>
-  <li>Milk</li>
-</ol>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- space surrounds us -->
+        <title>Borne of the same root - 本是同根生</title>
+</head>
+    <body><textarea id="output" style="float:right;height:50em;min-width:25em;pointer-events:none;" placeholder="Web Annotation Data Model document appears here upon selection"></textarea><span style="text-align:right;position:sticky; top:2px;">😀</span>
+       <h2         style="text-align: center;"  >[ 11 ]
+        </h2>
+        <p>
+                <span  >    </span> <span><span>In</span></span><span>&nbsp;</span>drowsy silence gold bent on her page<!-- splitter --><span id='textless_elements'><data value="777"></data><template>tempate text</template></span>. 
+              </p>
+              <p>
+                From the saloon a call came, long in dying. That was a tuningfork the
+                tuner had that he forgot that he now struck. A call again. That he now
+                poised that it now throbbed. You hear? It throbbed, pure, purer, softly
+                and softlier, its buzzing prongs. Longer in dying call.
+              </p>
+              <p>
+                Pat paid for diner’s popcorked bottle: and over tumbler, tray and
+                popcorked bottle ere he went he whispered, bald and bothered, with miss
+                Douce.
+              </p>
+              <p>
+                &mdash;<i>The bright stars fade</i>...
+              </p>
+              <p>
+                A voiceless song sang from within, singing:
+              </p>
+              <p>
+                &mdash;... <i>the morn is breaking.</i>
+              </p>
+              <p>
+                A duodene of birdnotes chirruped bright treble answer under sensitive
+                hands. Brightly the keys, all twinkling, linked, all harpsichording,
+                called to a voice to sing the strain of dewy morn, of youth, of love’s
+                leavetaking, life’s, love’s morn.
+              </p>
+              <p>
+                &mdash;<i>The dewdrops pearl</i>...
+              </p>
+              <p>
+                Lenehan’s lips over the counter lisped a low whistle of decoy.
+              </p>
+              <p>
+                &mdash;But look this way, he said, rose of Castile.
+              </p>
+              <p>
+                Jingle jaunted by the curb and stopped.
+              </p>
+              <p>
+                She rose and closed her reading, rose of Castile: fretted, forlorn,
+                dreamily rose.
+              </p>
+              <p>
+                &mdash;Did she fall or was she pushed? he asked her.
+              </p>
+              <p>
+                She answered, slighting:
+              </p>
+              <p>
+                &mdash;Ask no questions and you’ll hear no lies.
+              </p>
+              <p>
+                Like lady, ladylike.
+              </p>
+                  
+        <h2 style="text-align: center;">
+            [ CHAPTER II. The Pool of Tears ]
+              </h2>
+        
+        <p>
+                &lsquo;You ought to be ashamed of yourself,&rsquo; said Alice, &lsquo;a great girl like
+                    you,&rsquo; (she might well say this), &lsquo;to go on crying in this way! Stop this
+                    moment, I tell you!&rsquo; But she went on all the same, shedding gallons of
+                    tears, until there was a large pool all round her, about four inches deep
+                    and reaching half down the hall.
+        </p>
 
-<script src="dist/annotation-builder.min.js"></script>
-<script>
-document.addEventListener("selectionchange", function() {
-  var selection = window.getSelection();
-  console.log('Selection changed.', selection);
+        <p>
+                &lsquo;I wish I hadn&rsquo;t cried so much!&rsquo; said Alice, as she swam about, trying to
+                find her way out. &lsquo;I shall be punished for it now, I suppose, by being
+                drowned in my own tears! That <i>will</i> be a queer thing, to be sure! However,
+                everything is queer to-day.&rsquo; 
+        </p>
 
-  if (!('firstElementChild' in selection.focusNode && selection.focusNode.firstElementChild !=null
-        && selection.focusNode.firstElementChild.tagName === 'TEXTAREA')) {
-    var ab = new AnnotationBuilder().highlight(); //takes current user selection and builds an Annotation
-    var json = JSON.stringify(ab.result, false, '  '); // exports serialized version to JSON-LD
-    var output = document.getElementById('output');
-    output.value = json;
+        <p>
+                Just then she heard something splashing about in the pool a little way
+                off, and she swam nearer to make out what it was: at first she thought it
+                must be a walrus or hippopotamus, but then she remembered how small she
+                was now, and she soon made out that it was only a mouse that had slipped
+                in like herself.
+        </p>
+
+
+        <p>
+           And she kept on puzzling
+            about it while the Mouse was speaking, so that her idea of the tale was
+            something like this:&mdash;
+         </p>
+              <pre style="height:300px; width: 600px; overflow:scroll;">
+                       &lsquo;Fury said to a
+                       mouse, That he
+                      met in the
+                     house,
+                   &ldquo;Let us
+                    both go to
+                     law: <i>I</i> will
+                      prosecute
+                       <i>you</i>.&mdash;Come,
+                         I&rsquo;ll take no
+                         denial; We
+                        must have a
+                      trial: For
+                    really this
+                   morning I&rsquo;ve
+                  nothing
+                  to do.&rdquo;
+                    Said the
+                    mouse to the
+                     cur, &ldquo;Such
+                      a trial,
+                       dear Sir,
+                          With
+                        no jury
+                      or judge,
+                     would be
+                    wasting
+                    our
+                    breath.&rdquo;
+                      &ldquo;I&rsquo;ll be
+                      judge, I&rsquo;ll
+                       be jury,&rdquo;
+                           Said
+                       cunning
+                        old Fury:
+                        &ldquo;I&rsquo;ll
+                        try the
+                          whole
+                          cause,
+                            and
+                         condemn
+                         you
+                        to
+                         death.&rdquo;&rsquo;
+              </pre>
+                  <p>
+                    &lsquo;You are not attending!&rsquo; said the Mouse to Alice severely. &lsquo;What are you
+                    thinking of?&rsquo; 
+                  </p>
+
+
+<h2 style="text-align: center;">
+        [ 11, 11 ]
+     </h2>
+<pre style="transform: skewx(10deg) translatex(150px);
+transform-origin: bottom left;">🌱🌱▫️🌱▫️🌱🌱🌱🌱🌱
+🕳️💧🍄🌱🌱🌱🐢🌱▫️▫️
+🌱🌱🌱🌱▫️▫️▫️🐭▫️🌱
+🌱🌱🐛🌱🌱🌱🌱🌱▫️💧
+🐁🌱🐇🌱▫️☕🌱🌱🥕🌱
+▫️▫️🌱🌱🐛🌱🌱🌱▫️🌱
+🃏▫️🌱🌱💧☕💧▫️🌱▫️
+🐝▫️▫️▫️💧🌱🌱▫️🌱▫️
+🌱🌱🌱🌱🌱🐇▫️🌱🌱🌱
+🍂🌱💧🌱🌱🌱🌱▫️▫️🌱
+</pre>
+
+<h2 style="text-align: center;">
+        [ VIII ]
+     </h2>
+
+<h2 style="text-align: center;">
+               [ CHAPTER V. Advice from a Caterpillar ]
+     </h2>
+
+
+   <style>
+   @keyframes slidein {
+  from {
+    margin-left: 100%;
+    width: 300%; 
   }
-});
-</script>
-</body></html>
+
+  to {
+    margin-left: 0%;
+    width: 100%;
+  }
+}
+
+</style>
+<div style="height:300px; width: 600px; overflow:scroll;">
+    <div style="animation-duration: 10s; animation-name: slidein; animation-iteration-count: infinite;animation-direction: alternate;">
+           
+        <p>
+            The Caterpillar and Alice looked at each other for some time in silence:
+            at last the Caterpillar took the hookah out of its mouth, and addressed
+            her in a languid, sleepy voice.
+          </p>
+          <p>
+            &lsquo;Who are <i>you</i>?&rsquo; said the Caterpillar.
+          </p>
+          <p>
+            This was not an encouraging opening for a conversation. Alice replied,
+            rather shyly, &lsquo;I&mdash;I hardly know, sir, just at present&mdash;at least
+            I know who I <i>was</i> when I got up this morning, but I think I must have been
+            changed several times since then.&rsquo; 
+          </p>
+          <p>
+                &lsquo;What do you mean by that?&rsquo; said the Caterpillar sternly. &lsquo;Explain
+                yourself!&rsquo; 
+              </p>
+              <p>
+                &lsquo;I can&rsquo;t explain <i>myself</i>, I&rsquo;m afraid, sir&rsquo; said Alice, &lsquo;because I&rsquo;m not
+                myself, you see.&rsquo; 
+              </p>
+              <p>
+                &lsquo;I don&rsquo;t see,&rsquo; said the Caterpillar.
+              </p>
+              <p>
+                &lsquo;I&rsquo;m afraid I can&rsquo;t put it more clearly,&rsquo; Alice replied very politely,
+                &lsquo;for I can&rsquo;t understand it myself to begin with; and being so many
+                different sizes in a day is very confusing.&rsquo; 
+              </p>
+              <p>
+                &lsquo;It isn&rsquo;t,&rsquo; said the Caterpillar.
+              </p>
+              <p>
+                &lsquo;Well, perhaps you haven&rsquo;t found it so yet,&rsquo; said Alice; &lsquo;but when you
+                have to turn into a chrysalis&mdash;you will some day, you know&mdash;and
+                then after that into a butterfly, I should think you&rsquo;ll feel it a little
+                queer, won&rsquo;t you?&rsquo; 
+              </p>
+    </div>
+</div>
+<h2 style="text-align: center;">
+       [ Hebrew ]
+</h2>       
+<div style="direction:rtl;" lang="he">ג  וַיֹּאמֶר אֱלֹהִים, יְהִי אוֹר; וַיְהִי-אוֹר. 1 2 3 4 5</div>
+
+
+<h2 style="text-align: center;">
+        [ 8, 6 ]
+     </h2>
+
+空山新雨後<br>
+天氣晚來秋<br>
+明月松間照<br>
+清泉石上流<br>
+竹喧歸浣女<br>
+蓮動下漁舟<br>
+隨意春芳歇<br>
+王孫自可留
+
+
+
+
+<h2 style="text-align: center;">
+       [ Table ]
+</h2>  
+
+<table border="1px" cellspacing="0" cellpadding="10px">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th class="second-col">Age</th>
+            <th colspan="2">Location</th>
+          </tr>      
+        </thead>
+        <tbody>
+          <tr>
+            <td rowspan="2">Aziz</td>
+            <td rowspan="2">26</td>
+            <td>Chicago</td>
+            <td>IL</td>
+          </tr>
+          <tr>
+            <td>San Diego</td>
+            <td>CA</td>
+          </tr>
+          <tr>
+            <td>Jen</td>
+            <td>40</td>
+            <td>New York</td>
+            <td>NY</td>
+          </tr>
+          <tr>
+            <td>Jordan</td>
+            <td>29</td>
+            <td>London</td>
+            <td>UK</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="4">Footer</td>
+          </tr>
+        </tfoot>
+    
+      </table>
+
+  <script src="annotation-model.js"></script>
+   <script>
+   document.addEventListener("selectionchange", function() {
+     var selection = window.getSelection();
+     console.log('Selection changed.', selection);
+       var ab = new AnnotationBuilder().highlight(); //takes current user selection and builds an Annotation
+       var json = JSON.stringify(ab.result, false, '  '); // exports serialized version to JSON-LD
+       var output = document.getElementById('output');
+       output.value = json;
+     
+   });
+   </script>
+    </body>
+</html>
